@@ -1,0 +1,78 @@
+<div class="p-2 pt-3">
+    <div class="row mb-3 w-100">
+        <div class="col-6 title">
+
+            Audio</div>
+        <div class="col-6 text-end">
+            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="addAudio()">
+                +
+                <span class="ml-2 mr-1">Add</span>
+            </button>
+        </div>
+    </div>
+    <div class="flex-auto p-6 sm:p-10">
+
+        <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef> Description </th>
+                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef> Image </th>
+                <td mat-cell *matCellDef="let element">
+                    <img width="65" *ngIf="element?.image" src="{{profileImageUrl + element?.image}}"
+                        alt="category image">
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="play">
+                <th mat-header-cell *matHeaderCellDef> Play/Pause </th>
+                <td mat-cell *matCellDef="let element">
+                    <button type="button" mat-mini-fab color="primary" class="upload-btn" (click)="playAudio(element)">
+                        <mat-icon *ngIf="!element.isPlaying">play_arrow</mat-icon>
+                        <mat-icon *ngIf="element.isPlaying">pause</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button [matMenuTriggerFor]="overdueMenu">
+                        <mat-icon class="icon-size-5">more_vert</mat-icon>
+                    </button>
+                    <mat-menu #overdueMenu="matMenu">
+                        <!-- // routerLink="/admin/user/{{element._id}}/edit" -->
+                        <button mat-menu-item (click)="editAudio(element)">
+                            <mat-icon>edit</mat-icon> Edit
+                        </button>
+                        <button mat-menu-item (click)="deleteAudio(element)">
+                            <mat-icon>delete</mat-icon> Delete
+                        </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row text-center " *matNoDataRow>
+                <td class="mat-cell p-2" [attr.colspan]="displayedColumns.length">
+                    No data found !
+                </td>
+            </tr>
+        </table>
+
+        <div class="mt-4">
+            <mat-paginator [length]="totalCategory" [pageSize]="15" [pageSizeOptions]="[5, 15, 25]"
+                aria-label="Select page" (page)="handlePageEvent($event)">
+            </mat-paginator>
+        </div>
+    </div>
+</div>

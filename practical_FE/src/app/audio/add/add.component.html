@@ -1,0 +1,105 @@
+<div class="w-full">
+    <div class="d-flex justify-content-between">
+        <h1 mat-dialog-title>{{inputData && inputData?.editMode ? 'Edit' : 'Add New'}} Audio</h1>
+        <button type="button" mat-icon-button [mat-dialog-close]="true" class="close-button">
+            <mat-icon class="close-icon">close</mat-icon>
+        </button>
+
+    </div>
+    <div class="p-4">
+        <form [formGroup]="addSongForm">
+
+            <div class="w-full d-flex flex-column">
+                <!-- Title -->
+
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input [formControlName]="'name'" matInput>
+                    <mat-error *ngIf="addSongForm.get('name')?.hasError('required')">
+                        Name is required
+                    </mat-error>
+                    <mat-error *ngIf="addSongForm.get('name')?.hasError('minlength')">
+                        Name must be at least 3 characters
+                    </mat-error>
+                    <mat-error *ngIf="addSongForm.get('name')?.hasError('maxlength')">
+                        Name must not exceed 50 characters
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Description -->
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea [formControlName]="'description'" matInput autosize></textarea>
+                    <mat-error *ngIf="addSongForm.get('description')?.hasError('required')">
+                        Description is required
+                    </mat-error>
+                    <mat-error *ngIf="addSongForm.get('description')?.hasError('minlength')">
+                        Description must be at least 3 characters
+                    </mat-error>
+                    <mat-error *ngIf="addSongForm.get('description')?.hasError('maxlength')">
+                        Description must not exceed 1000 characters
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Image -->
+                <div class="sm:col-span-2 mb-3">
+                    <mat-label class="custom-mat-label">Image *</mat-label>
+                    <input [formControlName]="'image'" type="file" accept="image/png, image/jpg, image/jpeg"
+                        class="d-none" (change)="onFileSelected($event)" #fileUpload>
+                    <div>
+                        {{fileName || "No file uploaded yet."}}
+                        <button type="button" mat-mini-fab color="primary" class="upload-btn"
+                            (click)="fileUpload.click()">
+                            <mat-icon>attach_file</mat-icon>
+                        </button>
+                    </div>
+                    <span class="custom-error" *ngIf="addSongForm.get('image')?.hasError('required') && imageErr">
+                        Image is required
+                    </span>
+                </div>
+                <!-- song -->
+                <div class="sm:col-span-2 mb-3">
+                    <mat-label>Song *</mat-label>
+                    <input type="file" accept="audio/*,.mp3,.wav" (change)="onSongSelected($event)"
+                        [formControlName]="'song'" class="d-none" #songUpload />
+                    <div>
+                        {{songName || "No song uploaded yet."}}
+                        <button type="button" mat-mini-fab color="primary" class="upload-btn"
+                            (click)="songUpload.click()">
+                            <mat-icon>music_note</mat-icon>
+                        </button>
+                    </div>
+                    <span class="custom-error" *ngIf="addSongForm.get('song')?.hasError('required') && songErr">
+                        Song is required
+                    </span>
+
+                    <span class="custom-error"
+                        *ngIf="addSongForm.get('song')?.hasError('minDurationError')  && songErr">
+                        Please select an song a minimum duration of 30 seconds.
+                    </span>
+
+                </div>
+
+                <!-- Divider -->
+                <mat-divider></mat-divider>
+
+                <!-- Actions -->
+                <div class="d-flex gap-2 mt-2">
+                    <button mat-stroked-button type="button" [mat-dialog-close]="true" [disabled]="loaderShow">
+                        Cancel
+                    </button>
+                    <button class="ml-4" mat-flat-button type="submit" [disabled]="loaderShow" [color]="'primary'"
+                        (click)="createAudio()"><span class="spinner-border spinner-border-sm mr-1" role="status"
+                            aria-hidden="true" *ngIf="loaderShow"></span> Save
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

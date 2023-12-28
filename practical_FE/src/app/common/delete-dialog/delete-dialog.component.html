@@ -1,0 +1,20 @@
+<div class="w-full h-full">
+
+
+    <h1 mat-dialog-title>{{title}}</h1>
+
+    <div class="p-4" style="margin-top: -30px;">
+
+
+        <div *ngIf="message" style="font-size: 1rem;" class="mb-2">{{message}}</div>
+        <mat-divider></mat-divider>
+        <!-- Actions -->
+        <div class="d-flex gap-2 m-2">
+            <button mat-flat-button type="button" [mat-dialog-close]="true" [color]="'warn'">
+                No
+            </button>
+            <button mat-flat-button type="submit" [color]="'primary'" (click)="confirm()">Yes
+            </button>
+        </div>
+    </div>
+</div>
